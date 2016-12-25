@@ -1,0 +1,24 @@
+build:
+	find -name "*.java" > sources
+	rm -rf script_bin
+	mkdir script_bin
+	javac @sources -d script_bin
+	rm sources
+	
+run:
+	rm -rf output
+	mkdir output
+	for input_file in ./tests/*; do \
+		file_name=$$(basename "$$input_file"); \
+		java -cp script_bin Interpreter $$input_file \
+		./output/"$${file_name%.*}".ast \
+		./output/"$${file_name%.*}".out; \
+	done
+
+doc:
+	rm -rf docs
+	mkdir docs
+	javadoc -d docs src $$(find -name "*.java")
+
+clean:
+	rm -rf output docs script-bin
